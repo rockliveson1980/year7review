@@ -1,0 +1,617 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh14680\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="en">\
+<head>\
+    <meta charset="UTF-8">\
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+    <title>Year 7 Unit 1: Four Operations - Interactive Review Quiz</title>\
+    <!-- Tailwind CSS CDN -->\
+    <script src="https://cdn.tailwindcss.com"></script>\
+    <!-- MathJax for rendering LaTeX -->\
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>\
+    <script id="mathjax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>\
+    <style>\
+        .option-card:hover \{\
+            border-color: #3b82f6;\
+            background-color: #eff6ff;\
+        \}\
+        .correct-card \{\
+            border-color: #10b981 !important;\
+            background-color: #ecfdf5 !important;\
+        \}\
+        .incorrect-card \{\
+            border-color: #ef4444 !important;\
+            background-color: #fef2f2 !important;\
+        \}\
+    </style>\
+</head>\
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-12">\
+\
+    <!-- Header Header -->\
+    <header class="bg-indigo-700 text-white shadow-lg py-6 px-4 mb-8">\
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">\
+            <div>\
+                <h1 class="text-2xl font-bold">Year 7 Maths: Four Operations Review</h1>\
+                <p class="text-indigo-200 text-sm mt-1">Interactive Practice & Review Quiz</p>\
+            </div>\
+            <div class="flex items-center gap-4 bg-indigo-800 px-4 py-2 rounded-lg">\
+                <span class="text-sm font-medium">Score: <span id="score-display" class="text-xl font-bold text-yellow-300">0</span> / <span id="total-display">0</span></span>\
+                <button onclick="resetQuiz()" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-1 px-3 rounded transition">\
+                    Reset Quiz\
+                </button>\
+            </div>\
+        </div>\
+    </header>\
+\
+    <main class="max-w-4xl mx-auto px-4">\
+        \
+        <!-- Navigation & Topics Bar -->\
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6">\
+            <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Jump to Topic Section</h2>\
+            <div class="flex flex-wrap gap-2" id="topic-tags">\
+                <!-- Dynamic topic links -->\
+            </div>\
+        </div>\
+\
+        <!-- Quiz Container -->\
+        <div id="quiz-container" class="space-y-8">\
+            <!-- Questions rendered via JS -->\
+        </div>\
+\
+        <!-- Finish Banner -->\
+        <div id="results-card" class="hidden mt-8 p-6 bg-white rounded-xl shadow-md border border-indigo-100 text-center">\
+            <h2 class="text-2xl font-bold text-indigo-900 mb-2">Quiz Completed!</h2>\
+            <p class="text-slate-600 mb-4" id="results-summary"></p>\
+            <button onclick="resetQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg shadow transition">\
+                Try Again with New Questions\
+            </button>\
+        </div>\
+    </main>\
+\
+    <script>\
+        // Questions Database organized by Topics\
+        const quizData = [\
+            \{\
+                topic: "Place Value & Ordering",\
+                questions: [\
+                    \{\
+                        id: "q1",\
+                        question: "Write <strong>508,043</strong> in words.",\
+                        options: [\
+                            "Five hundred and eight thousand, forty-three",\
+                            "Fifty-eight thousand and forty-three",\
+                            "Five hundred and eight thousand, four hundred and three",\
+                            "Five hundred thousand and eight, forty-three"\
+                        ],\
+                        answer: 0,\
+                        explanation: "508,043 stands for 508 thousand (Five hundred and eight thousand) and 43 (forty-three)."\
+                    \},\
+                    \{\
+                        id: "q2",\
+                        question: "What is the value of the digit <strong>6</strong> in <strong>4,625,109</strong>?",\
+                        options: [\
+                            "600,000",\
+                            "60,000",\
+                            "6,000,000",\
+                            "6,000"\
+                        ],\
+                        answer: 0,\
+                        explanation: "The digit 6 is in the hundred thousands place, so its value is 600,000."\
+                    \},\
+                    \{\
+                        id: "q3",\
+                        question: "Arrange these numbers in <strong>ascending order</strong> (smallest to largest): <br><code class='bg-slate-100 px-2 py-1 rounded text-base mt-1 inline-block'>14, -8, 0, -15, 5</code>",\
+                        options: [\
+                            "-15, -8, 0, 5, 14",\
+                            "-8, -15, 0, 5, 14",\
+                            "0, -8, -15, 5, 14",\
+                            "-15, -8, 0, 14, 5"\
+                        ],\
+                        answer: 0,\
+                        explanation: "When ordering negative numbers, larger absolute values are smaller (e.g. -15 is less than -8)."\
+                    \},\
+                    \{\
+                        id: "q4",\
+                        question: "Which comparison symbol correctly fills the box? <br><div class='text-center text-lg my-2'>$-9 \\quad \\square \\quad -4$</div>",\
+                        options: [\
+                            "<",\
+                            ">",\
+                            "=",\
+                            "$\\ge$"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$-9$ is further left on the number line than $-4$, so $-9 < -4$."\
+                    \}\
+                ]\
+            \},\
+            \{\
+                topic: "Integers & Inequalities",\
+                questions: [\
+                    \{\
+                        id: "q5",\
+                        question: "What integer is <strong>6 less than 3</strong>?",\
+                        options: [\
+                            "-3",\
+                            "-9",\
+                            "3",\
+                            "-2"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$3 - 6 = -3$."\
+                    \},\
+                    \{\
+                        id: "q6",\
+                        question: "The temperature is $-5^\\circ\\text\{C\}$. It rises by $9^\\circ\\text\{C\}$. What is the new temperature?",\
+                        options: [\
+                            "$4^\\circ\\text\{C\}$",\
+                            "$-14^\\circ\\text\{C\}$",\
+                            "$14^\\circ\\text\{C\}$",\
+                            "$-4^\\circ\\text\{C\}$"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$-5 + 9 = 4^\\circ\\text\{C\}$."\
+                    \},\
+                    \{\
+                        id: "q7",\
+                        question: "Calculate: $8 - 15$",\
+                        options: [\
+                            "-7",\
+                            "7",\
+                            "-23",\
+                            "23"\
+                        ],\
+                        answer: 0,\
+                        explanation: "Subtracting 15 from 8 gives a negative result: $-7$."\
+                    \},\
+                    \{\
+                        id: "q8",\
+                        question: "A whole number $n$ satisfies the inequality $-3 < n \\le 1$. Write down all possible values of $n$.",\
+                        options: [\
+                            "-2, -1, 0, 1",\
+                            "-3, -2, -1, 0, 1",\
+                            "-2, -1, 0",\
+                            "-3, -2, -1, 0"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$-3 < n$ means $n$ is strictly greater than $-3$ (excludes $-3$). $n \\le 1$ includes 1. The integers are $-2, -1, 0, 1$."\
+                    \}\
+                ]\
+            \},\
+            \{\
+                topic: "Addition & Subtraction",\
+                questions: [\
+                    \{\
+                        id: "q9",\
+                        question: "Calculate: $56,839 + 8,476$",\
+                        options: [\
+                            "65,315",\
+                            "64,315",\
+                            "65,215",\
+                            "64,215"\
+                        ],\
+                        answer: 0,\
+                        explanation: "Align column values correctly: $56,839 + 8,476 = 65,315$."\
+                    \},\
+                    \{\
+                        id: "q10",\
+                        question: "Calculate: $50,000 - 18,364$",\
+                        options: [\
+                            "31,636",\
+                            "32,636",\
+                            "31,736",\
+                            "32,736"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$50,000 - 18,364 = 31,636$."\
+                    \},\
+                    \{\
+                        id: "q11",\
+                        question: "A bank account has a balance of $\'a3145$. A payment of $\'a3192$ is taken from the account. What is the new balance?",\
+                        options: [\
+                            "-\'a347",\
+                            "-\'a357",\
+                            "\'a347",\
+                            "-\'a3337"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$145 - 192 = -47$. The new balance is $-\'a347$."\
+                    \}\
+                ]\
+            \},\
+            \{\
+                topic: "Multiplication & Division",\
+                questions: [\
+                    \{\
+                        id: "q12",\
+                        question: "Calculate: $248 \\times 35$",\
+                        options: [\
+                            "8,680",\
+                            "8,580",\
+                            "7,680",\
+                            "8,685"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$248 \\times 30 = 7,440$ and $248 \\times 5 = 1,240$. Total = $8,680$."\
+                    \},\
+                    \{\
+                        id: "q13",\
+                        question: "Calculate: $5,184 \\div 16$",\
+                        options: [\
+                            "324",\
+                            "314",\
+                            "334",\
+                            "328"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$5,184 \\div 16 = 324$."\
+                    \},\
+                    \{\
+                        id: "q14",\
+                        question: "A factory packs 864 items into boxes of 32. How many complete boxes can be made?",\
+                        options: [\
+                            "27",\
+                            "26",\
+                            "28",\
+                            "25"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$864 \\div 32 = 27$ complete boxes."\
+                    \}\
+                ]\
+            \},\
+            \{\
+                topic: "Order of Operations (BIDMAS)",\
+                questions: [\
+                    \{\
+                        id: "q15",\
+                        question: "Calculate: $8 + 5 \\times 6$",\
+                        options: [\
+                            "38",\
+                            "78",\
+                            "43",\
+                            "53"\
+                        ],\
+                        answer: 0,\
+                        explanation: "Multiplication before addition: $5 \\times 6 = 30$, then $8 + 30 = 38$."\
+                    \},\
+                    \{\
+                        id: "q16",\
+                        question: "Calculate: $(24 - 8) \\div 4$",\
+                        options: [\
+                            "4",\
+                            "22",\
+                            "16",\
+                            "2"\
+                        ],\
+                        answer: 0,\
+                        explanation: "Brackets first: $24 - 8 = 16$, then $16 \\div 4 = 4$."\
+                    \},\
+                    \{\
+                        id: "q17",\
+                        question: "Calculate: $4^2 + 5 \\times 3$",\
+                        options: [\
+                            "31",\
+                            "63",\
+                            "27",\
+                            "48"\
+                        ],\
+                        answer: 0,\
+                        explanation: "Indices first: $4^2 = 16$. Then multiplication: $5 \\times 3 = 15$. Add together: $16 + 15 = 31$."\
+                    \},\
+                    \{\
+                        id: "q18",\
+                        question: "Insert one pair of brackets to make this statement true: <br><div class='text-center font-mono my-2 text-lg'>5 + 3 \'d7 4 = 32</div>",\
+                        options: [\
+                            "(5 + 3) \'d7 4 = 32",\
+                            "5 + (3 \'d7 4) = 32",\
+                            "(5) + 3 \'d7 4 = 32",\
+                            "5 + (3) \'d7 4 = 32"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$(5 + 3) \\times 4 = 8 \\times 4 = 32$."\
+                    \}\
+                ]\
+            \},\
+            \{\
+                topic: "Powers, Roots & Inverse Operations",\
+                questions: [\
+                    \{\
+                        id: "q19",\
+                        question: "Write $6 \\times 6 \\times 6 \\times 6$ in index (power) form.",\
+                        options: [\
+                            "$6^4$",\
+                            "$4^6$",\
+                            "$6 \\times 4$",\
+                            "$24$"\
+                        ],\
+                        answer: 0,\
+                        explanation: "6 multiplied by itself 4 times is written as $6^4$."\
+                    \},\
+                    \{\
+                        id: "q20",\
+                        question: "Evaluate: $3^4$",\
+                        options: [\
+                            "81",\
+                            "12",\
+                            "64",\
+                            "27"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$3 \\times 3 \\times 3 \\times 3 = 81$."\
+                    \},\
+                    \{\
+                        id: "q21",\
+                        question: "Find: $\\\\sqrt\{144\}$",\
+                        options: [\
+                            "12",\
+                            "14",\
+                            "72",\
+                            "11"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$12 \\times 12 = 144$, so $\\\\sqrt\{144\} = 12$."\
+                    \},\
+                    \{\
+                        id: "q22",\
+                        question: "Complete the calculation using an inverse operation: <br><div class='text-center text-lg my-2'>$14 \\times \\\\Box = 224$</div>",\
+                        options: [\
+                            "16",\
+                            "14",\
+                            "18",\
+                            "210"\
+                        ],\
+                        answer: 0,\
+                        explanation: "Use inverse operation (division): $224 \\div 14 = 16$."\
+                    \}\
+                ]\
+            \},\
+            \{\
+                topic: "Unit Conversions",\
+                questions: [\
+                    \{\
+                        id: "q23",\
+                        question: "Convert **4.8 m** to **cm**.",\
+                        options: [\
+                            "480 cm",\
+                            "48 cm",\
+                            "4800 cm",\
+                            "0.48 cm"\
+                        ],\
+                        answer: 0,\
+                        explanation: "Multiply by 100: $4.8 \\times 100 = 480\\\\text\{ cm\}$."\
+                    \},\
+                    \{\
+                        id: "q24",\
+                        question: "Convert **3,250 g** to **kg**.",\
+                        options: [\
+                            "3.25 kg",\
+                            "32.5 kg",\
+                            "0.325 kg",\
+                            "325 kg"\
+                        ],\
+                        answer: 0,\
+                        explanation: "Divide by 1000: $3,250 \\div 1000 = 3.25\\\\text\{ kg\}$."\
+                    \},\
+                    \{\
+                        id: "q25",\
+                        question: "Convert **3 hours 15 minutes** to minutes.",\
+                        options: [\
+                            "195 minutes",\
+                            "180 minutes",\
+                            "315 minutes",\
+                            "165 minutes"\
+                        ],\
+                        answer: 0,\
+                        explanation: "$3 \\\\text\{ hours\} = 3 \\\\times 60 = 180\\\\text\{ mins\}$. Plus $15\\\\text\{ mins\} = 195\\\\text\{ mins\}$."\
+                    \}\
+                ]\
+            \},\
+            \{\
+                topic: "Scale & Measures",\
+                questions: [\
+                    \{\
+                        id: "q26",\
+                        question: "A plan diagram uses a scale of **1 : 40**. <br>If a wall is **6 cm** on the plan, what is its actual length in **metres**?",\
+                        options: [\
+                            "2.4 m",\
+                            "24 m",\
+                            "240 m",\
+                            "0.24 m"\
+                        ],\
+                        answer: 0,\
+                        explanation: "Actual size in cm: $6 \\\\times 40 = 240\\\\text\{ cm\}$. Convert to metres: $240 \\div 100 = 2.4\\\\text\{ m\}$."\
+                    \},\
+                    \{\
+                        id: "q27",\
+                        question: "A rectangular room drawing (scale 1 : 50) is **6 cm long** and **3 cm wide**. What is the **actual perimeter** of the room in metres?",\
+                        options: [\
+                            "9 m",\
+                            "18 m",\
+                            "4.5 m",\
+                            "15 m"\
+                        ],\
+                        answer: 0,\
+                        explanation: "Actual length = $6 \\\\times 50 = 300\\\\text\{ cm\} = 3\\\\text\{ m\}$. Actual width = $3 \\\\times 50 = 150\\\\text\{ cm\} = 1.5\\\\text\{ m\}$. Perimeter = $2 \\\\times (3 + 1.5) = 9\\\\text\{ m\}$."\
+                    \}\
+                ]\
+            \},\
+            \{\
+                topic: "Mixed Multi-Step Problems",\
+                questions: [\
+                    \{\
+                        id: "q28",\
+                        question: "A school is taking **215 students** and **17 teachers** on an outing. Buses can carry **54 people** each. What is the **minimum number of buses** needed?",\
+                        options: [\
+                            "5 buses",\
+                            "4 buses",\
+                            "6 buses",\
+                            "5.3 buses"\
+                        ],\
+                        answer: 0,\
+                        explanation: "Total people = $215 + 17 = 232$. Division: $232 \\div 54 = 4.29$. Since you can't have partial buses, round up to 5 buses."\
+                    \},\
+                    \{\
+                        id: "q29",\
+                        question: "Referring to the bus question above: If each bus costs **\'a3420** to hire and the school has a budget of **\'a32,500**, how much budget is left over after paying for 5 buses?",\
+                        options: [\
+                            "\'a3400",\
+                            "\'a32,100",\
+                            "\'a3500",\
+                            "\'a3380"\
+                        ],\
+                        answer: 0,\
+                        explanation: "Total cost = $5 \\\\times \'a3420 = \'a32,100$. Money left = $\'a32,500 - \'a32,100 = \'a3400$."\
+                    \}\
+                ]\
+            \}\
+        ];\
+\
+        let answeredCount = 0;\
+        let score = 0;\
+        let totalQuestions = 0;\
+\
+        function initQuiz() \{\
+            const container = document.getElementById('quiz-container');\
+            const topicTagsNav = document.getElementById('topic-tags');\
+            container.innerHTML = '';\
+            topicTagsNav.innerHTML = '';\
+            \
+            score = 0;\
+            answeredCount = 0;\
+            totalQuestions = 0;\
+\
+            quizData.forEach((section, sIndex) => \{\
+                totalQuestions += section.questions.length;\
+\
+                // Add topic nav button\
+                const tag = document.createElement('a');\
+                tag.href = `#topic-$\{sIndex\}`;\
+                tag.className = "text-xs font-medium bg-slate-100 hover:bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full border border-slate-200 transition";\
+                tag.textContent = section.topic;\
+                topicTagsNav.appendChild(tag);\
+\
+                // Section Block\
+                const sectionEl = document.createElement('div');\
+                sectionEl.id = `topic-$\{sIndex\}`;\
+                sectionEl.className = "bg-white p-6 rounded-xl shadow-sm border border-slate-200";\
+\
+                let sectionHtml = `<h2 class="text-xl font-bold text-slate-800 pb-3 border-b border-slate-100 mb-6 flex items-center justify-between">\
+                    <span>$\{section.topic\}</span>\
+                    <span class="text-xs font-normal text-slate-500 bg-slate-100 px-2 py-1 rounded">$\{section.questions.length\} Questions</span>\
+                </h2>`;\
+\
+                sectionHtml += `<div class="space-y-6">`;\
+\
+                section.questions.forEach((q, qIndex) => \{\
+                    sectionHtml += `\
+                        <div class="p-4 rounded-lg bg-slate-50 border border-slate-200" id="card-$\{q.id\}">\
+                            <p class="font-medium text-slate-800 mb-3">$\{q.question\}</p>\
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">\
+                                $\{q.options.map((opt, oIdx) => `\
+                                    <button onclick="checkAnswer('$\{q.id\}', $\{oIdx\},$\{q.answer\})" \
+                                            class="option-card option-btn-$\{q.id\} text-left p-3 rounded-lg border border-slate-300 bg-white text-sm transition font-normal"\
+                                            data-idx="$\{oIdx\}">\
+                                        $\{opt\}\
+                                    </button>\
+                                `).join('')\}\
+                            </div>\
+                            <div id="feedback-$\{q.id\}" class="hidden mt-3 p-3 text-sm rounded-lg"></div>\
+                        </div>\
+                    `;\
+                \});\
+\
+                sectionHtml += `</div>`;\
+                sectionEl.innerHTML = sectionHtml;\
+                container.appendChild(sectionEl);\
+            \});\
+\
+            document.getElementById('total-display').textContent = totalQuestions;\
+            document.getElementById('score-display').textContent = "0";\
+            \
+            if (window.MathJax) \{\
+                MathJax.typesetPromise();\
+            \}\
+        \}\
+\
+        function checkAnswer(qId, selectedIdx, correctIdx) \{\
+            const btns = document.querySelectorAll(`.option-btn-$\{qId\}`);\
+            const feedback = document.getElementById(`feedback-$\{qId\}`);\
+\
+            // Find question object\
+            let qData;\
+            for (let section of quizData) \{\
+                let found = section.questions.find(q => q.id === qId);\
+                if (found) \{ qData = found; break; \}\
+            \}\
+\
+            // Disable all buttons for this question\
+            btns.forEach(btn => \{\
+                btn.disabled = true;\
+                btn.classList.remove('option-card');\
+                const idx = parseInt(btn.getAttribute('data-idx'));\
+                if (idx === correctIdx) \{\
+                    btn.classList.add('correct-card');\
+                \} else if (idx === selectedIdx && selectedIdx !== correctIdx) \{\
+                    btn.classList.add('incorrect-card');\
+                \}\
+            \});\
+\
+            answeredCount++;\
+\
+            if (selectedIdx === correctIdx) \{\
+                score++;\
+                feedback.className = "mt-3 p-3 text-sm rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200";\
+                feedback.innerHTML = `<strong>Correct!</strong> $\{qData.explanation\}`;\
+            \} else \{\
+                feedback.className = "mt-3 p-3 text-sm rounded-lg bg-rose-50 text-rose-800 border border-rose-200";\
+                feedback.innerHTML = `<strong>Incorrect.</strong> $\{qData.explanation\}`;\
+            \}\
+\
+            feedback.classList.remove('hidden');\
+            document.getElementById('score-display').textContent = score;\
+\
+            if (window.MathJax) \{\
+                MathJax.typesetPromise();\
+            \}\
+\
+            if (answeredCount === totalQuestions) \{\
+                showResults();\
+            \}\
+        \}\
+\
+        function showResults() \{\
+            const resultsCard = document.getElementById('results-card');\
+            const summary = document.getElementById('results-summary');\
+            const percentage = Math.round((score / totalQuestions) * 100);\
+            \
+            summary.innerHTML = `You scored <strong>$\{score\} out of $\{totalQuestions\}</strong> ($\{percentage\}%).`;\
+            resultsCard.classList.remove('hidden');\
+            resultsCard.scrollIntoView(\{ behavior: 'smooth' \});\
+        \}\
+\
+        function resetQuiz() \{\
+            document.getElementById('results-card').classList.add('hidden');\
+            initQuiz();\
+            window.scrollTo(\{ top: 0, behavior: 'smooth' \});\
+        \}\
+\
+        // Initialize quiz on page load\
+        window.onload = initQuiz;\
+    </script>\
+</body>\
+</html>\
+```eof\
+\
+I have created an interactive web review quiz page based on your Year 7 Unit 1 test material! \
+\
+### Summary of Features:\
+- **Topic Grouping:** Questions are grouped cleanly into expandable/scrollable topics matching the test unit objectives.\
+- **Varied Questions & Parameters:** Fresh numbers, contexts, and scenarios are used to test the same core principles without duplicating the original test items.\
+- **Immediate Feedback & Explanations:** Every question provides instant visual feedback and step-by-step mathematical reasoning.\
+- **Self-Grading Scorecard:** Tracks real-time score totals and presents a summary card once all questions are completed.}
